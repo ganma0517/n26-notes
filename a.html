@@ -1,3 +1,8 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>研究設計互動圖</title>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@400&display=swap" rel="stylesheet">
 <style>
@@ -31,8 +36,26 @@ mark{background:#fff2bf;color:inherit;padding:0 2px}
 .steps button{font-family:var(--mono);font-size:.7rem;padding:4px 9px}
 .tour{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:0 0 14px;padding-bottom:12px;border-bottom:1px solid var(--rule)} .tour>button{font-size:.8rem;padding:5px 12px} .tour .tpos{font-family:var(--mono);font-size:.7rem;color:var(--soft);min-width:48px;text-align:center} .tlist{display:flex;flex-wrap:wrap;gap:6px;margin-left:6px} .tlist button{font-size:.72rem;padding:4px 10px}
 .stepnote{font-size:.82rem;color:var(--muted);min-height:2.4em}
+.ptoggle{display:none}
+.panel{position:relative}
+.layout>div,.layout>aside{min-width:0} .fig{max-width:100%}
+@media (max-width:640px){
+  html{font-size:100%} .wrap{padding:16px 12px 120px}
+  .ctl{gap:6px} .ctl .lab{width:100%;margin:2px 0 0} .sep{display:none} button{padding:5px 10px}
+  .tour{padding-bottom:8px} .tlist{width:100%;margin:6px 0 0;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:4px} .tlist button{flex:0 0 auto}
+  .steps{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:4px} .steps button{flex:0 0 auto}
+  .fig svg{min-width:720px} .fignote::after{content:"　圖可左右滑動，雙指縮放。"}
+  .panel{position:fixed;left:0;right:0;bottom:0;z-index:20;max-height:48vh;overflow:auto;min-height:0;border-radius:12px 12px 0 0;border-top:2px solid var(--acc);padding:10px 16px 16px}
+  .panel.collapsed{max-height:52px;overflow:hidden;padding-bottom:0}
+  .panel h2{font-size:1rem;margin:0 0 6px;padding-right:72px}
+  .ptoggle{display:block;position:absolute;right:12px;top:8px;font-size:.72rem;padding:3px 9px}
+}
 .colophon{margin-top:14px;padding-top:8px;border-top:1px solid var(--rule);font-family:var(--mono);font-size:.62rem;color:var(--soft);letter-spacing:.06em}
 </style>
+<style>body{margin:0}img{max-width:100%}</style>
+</head>
+<body>
+
 <div class="wrap">
 <p class="eyebrow">普發現金 × 中國威脅框架 · 研究設計 · 互動版</p>
 <h1>框架或情緒子句 → 害怕／生氣／希望 → 現金支持與國防位移</h1>
@@ -46,7 +69,7 @@ mark{background:#fff2bf;color:inherit;padding:0 2px}
 <div class="steps"><span class="lab" style="align-self:center">受訪順序</span><button data-step="0" aria-pressed="false">1 刺激頁 26-1</button><button data-step="1" aria-pressed="false">2 情緒 26-1b</button><button data-step="2" aria-pressed="false">3 理由與檢核 26-2、26-3</button><button data-step="3" aria-pressed="false">4 整體支持 26-4、26-4b</button><button data-step="4" aria-pressed="false">5 國防重測 25′</button></div>
 <div class="stepnote" id="stepnote">點選上方步驟，依受訪者看到的順序逐段高亮；點選圖中節點看題目文字與預測。</div>
 </div>
-<aside class="panel" id="panel"><h2>研究設計總覽</h2><p>實驗插在中國效應 2026 問卷題 26 之後、題 27 之前，N≈3,000，三選一設計各用滿樣本。左欄是刺激，中欄是刺激後立即測量的三種離散情緒，右欄是兩個依變項，下方是前測調節。</p><p>點選任一節點查看題目文字、預測方向與文獻依據；用上方按鈕切換設計或只看一條情緒路徑。</p><p class="n">圖例：橘色為焦點路徑，虛線為預期不顯著或負向，細線為刺激到情緒的 a 路徑。</p></aside>
+<aside class="panel" id="panel"><button class="ptoggle" id="ptoggle" aria-expanded="true">收合 ▼</button><h2>研究設計總覽</h2><p>實驗插在中國效應 2026 問卷題 26 之後、題 27 之前，N≈3,000，三選一設計各用滿樣本。左欄是刺激，中欄是刺激後立即測量的三種離散情緒，右欄是兩個依變項，下方是前測調節。</p><p>點選任一節點查看題目文字、預測方向與文獻依據；用上方按鈕切換設計或只看一條情緒路徑。</p><p class="n">圖例：橘色為焦點路徑，虛線為預期不顯著或負向，細線為刺激到情緒的 a 路徑。</p></aside>
 </div>
 <p class="colophon">來源：操作表 v14、討論稿 v3、文獻卡 09–21。以 diagram-design 規格繪製，互動層為原生 JS。</p>
 </div>
@@ -59,7 +82,10 @@ function press(sel,attr,val){document.querySelectorAll(sel).forEach(b=>b.setAttr
 function applyEmo(){edges.forEach(e=>{const m=e.dataset.emo;const on=emo==='all'||m===emo||(m==='a');e.classList.toggle('dim',!on);e.classList.toggle('hot',emo!=='all'&&m===emo)});
   nodes.forEach(n=>{const k=n.dataset.node;let dim=false;if(emo!=='all'){const keep={fear:['e1','y1','y2'],anger:['e2','y1','y2'],hope:['e3','y1']}[emo];dim=!(keep.includes(k)||k===design||k==='w')}n.classList.toggle('dim',dim)});
   edges.forEach(e=>{if(e.dataset.emo==='a'&&e.dataset.from!==design)e.classList.add('dim')})}
-function show(key){nodes.forEach(n=>n.classList.toggle('sel',n.dataset.node===key));const p=PANEL[key];if(p)panel.innerHTML='<h2>'+p.t+'</h2>'+p.b}
+const isMobile=()=>window.matchMedia('(max-width:640px)').matches;
+function setPanel(html){panel.innerHTML='<button class="ptoggle" id="ptoggle" aria-expanded="true">收合 ▼</button>'+html;panel.classList.remove('collapsed');bindToggle()}
+function bindToggle(){const b=document.getElementById('ptoggle');if(!b)return;b.onclick=()=>{const c=panel.classList.toggle('collapsed');b.textContent=c?'展開 ▲':'收合 ▼';b.setAttribute('aria-expanded',String(!c))}}
+function show(key){nodes.forEach(n=>n.classList.toggle('sel',n.dataset.node===key));const p=PANEL[key];if(p)setPanel('<h2>'+p.t+'</h2>'+p.b)}
 document.querySelectorAll('[data-design]').forEach(b=>b.onclick=()=>{design=b.dataset.design;press('[data-design]','design',design);applyEmo();show(design)});
 document.querySelectorAll('[data-emo]').forEach(b=>b.onclick=()=>{emo=b.dataset.emo;press('[data-emo]','emo',emo);applyEmo();if(emo!=='all')show({fear:'e1',anger:'e2',hope:'e3'}[emo])});
 nodes.forEach(n=>{const go=()=>{const k=n.dataset.node;if(k==='m1'||k==='m2'){design=k;press('[data-design]','design',k);applyEmo()}show(k)};n.onclick=ev=>{ev.stopPropagation();go()};n.onkeydown=ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();go()}}});
@@ -70,9 +96,13 @@ const TOUR=[{"t": "研究動機", "b": "<p>2025 年兩波大罷免全數未通�
 function tourGo(i){if(i<0||i>=TOUR.length)return;ti=i;const s=TOUR[i];press('[data-tour]','tour',String(i));document.getElementById('tpos').textContent=(i+1)+' / '+TOUR.length;
   nodes.forEach(n=>n.classList.toggle('dim',!s.nodes.includes(n.dataset.node)));nodes.forEach(n=>n.classList.remove('sel'));
   edges.forEach(e=>{const on=s.emos.includes(e.dataset.emo)&&!(e.dataset.emo==='a'&&!s.nodes.includes(e.dataset.from));e.classList.toggle('dim',!on);e.classList.toggle('hot',on&&e.dataset.emo!=='a')});
-  panel.innerHTML='<h2>'+(i+1)+'・'+s.t+'</h2>'+s.b;note.innerHTML='逐步討論 '+(i+1)+'／'+TOUR.length+'：'+s.t}
+  setPanel('<h2>'+(i+1)+'・'+s.t+'</h2>'+s.b);note.innerHTML='逐步討論 '+(i+1)+'／'+TOUR.length+'：'+s.t}
 document.getElementById('tprev').onclick=()=>tourGo(ti<=0?0:ti-1);document.getElementById('tnext').onclick=()=>tourGo(ti<0?0:Math.min(TOUR.length-1,ti+1));
 document.querySelectorAll('[data-tour]').forEach(b=>b.onclick=()=>tourGo(+b.dataset.tour));
 document.addEventListener('keydown',ev=>{const t=ev.target;if(t&&t.closest&&(t.tagName==='BUTTON'||t.closest('.node')))return;if(ev.key==='ArrowRight')tourGo(ti<0?0:Math.min(TOUR.length-1,ti+1));if(ev.key==='ArrowLeft')tourGo(Math.max(0,ti-1))});
+bindToggle();if(isMobile()){panel.classList.add('collapsed');const b=document.getElementById('ptoggle');b.textContent='展開 ▲';b.setAttribute('aria-expanded','false')}
 applyEmo();
 </script>
+
+</body>
+</html>
