@@ -70,6 +70,6 @@ function tourGo(i){if(i<0||i>=TOUR.length)return;ti=i;const s=TOUR[i];press('[da
   panel.innerHTML='<h2>'+(i+1)+'・'+s.t+'</h2>'+s.b;note.innerHTML='逐步討論 '+(i+1)+'／'+TOUR.length+'：'+s.t}
 document.getElementById('tprev').onclick=()=>tourGo(ti<=0?0:ti-1);document.getElementById('tnext').onclick=()=>tourGo(ti<0?0:Math.min(TOUR.length-1,ti+1));
 document.querySelectorAll('[data-tour]').forEach(b=>b.onclick=()=>tourGo(+b.dataset.tour));
-document.addEventListener('keydown',ev=>{if(ev.target.tagName==='BUTTON'||ev.target.closest('.node'))return;if(ev.key==='ArrowRight')tourGo(ti<0?0:Math.min(TOUR.length-1,ti+1));if(ev.key==='ArrowLeft')tourGo(Math.max(0,ti-1))});
+document.addEventListener('keydown',ev=>{const t=ev.target;if(t&&t.closest&&(t.tagName==='BUTTON'||t.closest('.node')))return;if(ev.key==='ArrowRight')tourGo(ti<0?0:Math.min(TOUR.length-1,ti+1));if(ev.key==='ArrowLeft')tourGo(Math.max(0,ti-1))});
 applyEmo();
 </script>
