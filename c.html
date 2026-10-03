@@ -1,0 +1,754 @@
+<title>普發現金題組操作表</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;700&family=Noto+Sans+TC:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --paper:#f5f6f8; --surface:#ffffff; --ink:#1b2430; --muted:#5b6572; --rule:#d9dee5; --soft:#eceff3;
+  --a:#0f766e; --a-bg:#e3f3f1; --b:#3b4fd8; --b-bg:#e8eafc; --c:#b45309; --c-bg:#fbeedc;
+  --warn:#9a3412; --warn-bg:#fdebe4; --mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;
+  --serif:'Noto Serif TC','Songti TC',serif; --sans:'Noto Sans TC','PingFang TC',system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --paper:#13171d; --surface:#1b2129; --ink:#e8ecf1; --muted:#9aa5b3; --rule:#2d3642; --soft:#232b35;
+  --a:#5fd3c6; --a-bg:#123734; --b:#9aa7ff; --b-bg:#242b5e; --c:#f3b25e; --c-bg:#4a2f10;
+  --warn:#ffb08a; --warn-bg:#4a2416;
+}}
+:root[data-theme="dark"]{
+  --paper:#13171d; --surface:#1b2129; --ink:#e8ecf1; --muted:#9aa5b3; --rule:#2d3642; --soft:#232b35;
+  --a:#5fd3c6; --a-bg:#123734; --b:#9aa7ff; --b-bg:#242b5e; --c:#f3b25e; --c-bg:#4a2f10;
+  --warn:#ffb08a; --warn-bg:#4a2416;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:15.5px;line-height:1.75}
+.wrap{max-width:980px;margin:0 auto;padding:40px 24px 96px}
+header{border-bottom:1px solid var(--rule);padding-bottom:22px;margin-bottom:28px}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+h1{font-family:var(--serif);font-size:30px;line-height:1.3;margin:6px 0 10px;text-wrap:balance}
+h2{font-family:var(--serif);font-size:22px;margin:48px 0 10px;padding-top:8px;text-wrap:balance}
+h3{font-size:16px;margin:28px 0 8px;color:var(--muted);font-weight:500;letter-spacing:.04em}
+p{margin:0 0 12px;max-width:72ch}
+.lede{color:var(--muted);max-width:72ch}
+.tabs{position:sticky;top:0;z-index:5;background:var(--paper);display:flex;gap:8px;padding:12px 0;border-bottom:1px solid var(--rule);margin-bottom:8px}
+.tab{appearance:none;border:1px solid var(--rule);background:var(--surface);color:var(--ink);padding:8px 14px;border-radius:999px;font:inherit;font-size:14px;cursor:pointer}
+.tab[aria-selected="true"]{color:#fff;border-color:transparent}
+.tab[data-d="A"][aria-selected="true"]{background:var(--a)} .tab[data-d="B"][aria-selected="true"]{background:var(--b)} .tab[data-d="C"][aria-selected="true"]{background:var(--c)}
+.tab:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.pane{display:grid;gap:14px}
+.pane[hidden]{display:none}
+.meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin:8px 0 18px}
+.meta div{background:var(--surface);border:1px solid var(--rule);border-radius:8px;padding:10px 14px}
+.meta b{display:block;font-size:12px;color:var(--muted);font-weight:500;letter-spacing:.04em}
+.step{display:grid;grid-template-columns:120px 1fr;gap:0;background:var(--surface);border:1px solid var(--rule);border-radius:10px;overflow:hidden}
+.step .no{padding:16px 14px;border-right:1px solid var(--rule);background:var(--soft)}
+.step .no .id{font-family:var(--mono);font-size:17px;font-weight:500}
+.step .no .role{font-size:12px;color:var(--muted);margin-top:4px}
+.step .body{padding:16px 20px;min-width:0}
+.step .title{font-weight:700;margin-bottom:6px}
+.say{border-left:3px solid var(--rule);padding:8px 14px;margin:8px 0;background:var(--paper);border-radius:0 6px 6px 0}
+.say .who{font-size:12px;color:var(--muted);letter-spacing:.04em}
+.opts{display:flex;flex-wrap:wrap;gap:6px 14px;margin:6px 0 2px;font-size:14.5px}
+.opts span::before{content:"○ ";color:var(--muted)}
+.note{font-size:13.5px;color:var(--muted);margin-top:8px}
+.note b{color:var(--ink);font-weight:500}
+.var{font-family:var(--mono);font-size:12.5px;background:var(--soft);padding:1px 6px;border-radius:4px;white-space:nowrap}
+.arm{border:1px solid var(--rule);border-radius:8px;padding:10px 14px;margin-top:10px;background:var(--paper)}
+.arm .tag{display:inline-block;font-family:var(--mono);font-size:12px;padding:1px 8px;border-radius:4px;margin-right:8px;font-weight:500}
+.A .tag{background:var(--a-bg);color:var(--a)} .B .tag{background:var(--b-bg);color:var(--b)} .C .tag{background:var(--c-bg);color:var(--c)}
+.arm .n{float:right;font-family:var(--mono);font-size:12.5px;color:var(--muted)}
+mark{background:transparent;color:inherit;font-weight:700;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:3px}
+.A mark{text-decoration-color:var(--a)} .B mark{text-decoration-color:var(--b)} .C mark{text-decoration-color:var(--c)}
+table{border-collapse:collapse;width:100%;font-size:14.5px;margin:8px 0}
+th,td{border:1px solid var(--rule);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--soft);font-weight:500;font-size:13px;color:var(--muted)}
+.scroll{overflow-x:auto}
+.warn{background:var(--warn-bg);color:var(--warn);border-radius:8px;padding:10px 14px;font-size:14px;margin:12px 0}
+.common{background:var(--surface);border:1px solid var(--rule);border-radius:10px;padding:18px 22px;margin-bottom:14px}
+.common ul{margin:6px 0 0;padding-left:20px}
+.common li{margin:3px 0}
+.fieldtab td:first-child{font-family:var(--mono);font-size:13px;white-space:nowrap}
+.kicker{font-size:13px;color:var(--muted)}
+
+.flowfig{margin:4px 0 10px;background:var(--surface);border:1px solid var(--rule);border-radius:10px;padding:10px 12px;overflow-x:auto}
+.flow{width:100%;min-width:720px;height:auto;display:block;font-family:var(--sans)}
+.flow .fb{fill:var(--paper);stroke:var(--rule);stroke-width:1.2}
+.flow .fb.pre{fill:var(--soft)} .flow .fb.rnd{fill:var(--surface);stroke-dasharray:4 3}
+.flow .fb.dv{stroke-width:1.6} .flow .fb.med{stroke-dasharray:3 3} .flow .fb.chk{stroke-dasharray:1.5 3}
+.flow .ft{font-size:12.5px;font-weight:500;fill:var(--ink)} .flow .fs{font-size:11px;fill:var(--muted)}
+.flow .fl{font-size:11px;fill:var(--muted)} .flow .fcap{font-size:12px;font-weight:700;fill:var(--ink)}
+.flow .fmono{font-family:var(--mono);font-size:10.5px;fill:var(--muted)} .flow .fstar{font-size:11px}
+.flow .fe{fill:none;stroke:var(--muted);stroke-width:1.3} .flow .fmk{fill:var(--muted)}
+.flow.A .fb.arm{stroke:var(--a);fill:var(--a-bg)} .flow.A .fe.arm{stroke:var(--a)} .flow.A .fmk{fill:var(--a)} .flow.A .fb.dv{stroke:var(--a)} .flow.A .fstar{fill:var(--a)}
+.flow.B .fb.arm{stroke:var(--b);fill:var(--b-bg)} .flow.B .fe.arm{stroke:var(--b)} .flow.B .fmk{fill:var(--b)} .flow.B .fb.dv{stroke:var(--b)} .flow.B .fstar{fill:var(--b)}
+.flow.C .fb.arm{stroke:var(--c);fill:var(--c-bg)} .flow.C .fe.arm{stroke:var(--c)} .flow.C .fmk{fill:var(--c)} .flow.C .fb.dv{stroke:var(--c)} .flow.C .fstar{fill:var(--c)}
+
+.path{border:1px solid var(--rule);border-radius:10px;padding:12px 16px;margin:4px 0 10px;background:var(--surface)}
+.path .eyebrow{margin-bottom:6px}
+.prow{display:grid;grid-template-columns:56px 1fr;gap:10px;padding:4px 0;border-top:1px dashed var(--rule);font-size:14px}
+.prow:first-of-type{border-top:0}
+.pk{font-family:var(--mono);font-size:12px;color:var(--muted);padding-top:2px}
+.pcan{font-size:13.5px;color:var(--muted);margin-top:6px;padding-left:66px}
+.pcan b{display:inline-block;font-family:var(--mono);font-size:11.5px;font-weight:500;padding:0 6px;border-radius:4px;margin-right:6px;margin-left:-66px;width:54px;text-align:center}
+.A .pcan b,.A .pk{color:var(--a)} .B .pcan b,.B .pk{color:var(--b)} .C .pcan b,.C .pk{color:var(--c)}
+.A .pcan b{background:var(--a-bg)} .B .pcan b{background:var(--b-bg)} .C .pcan b{background:var(--c-bg)}
+@media (max-width:640px){.pcan{padding-left:0}.pcan b{margin-left:0;display:block;width:auto;margin-bottom:2px}}
+
+.archfig{margin:4px 0 10px;background:var(--surface);border:1px solid var(--rule);border-radius:10px;padding:10px 12px;overflow-x:auto}
+.archfig figcaption{margin-bottom:4px}
+.flow.arch .fb.med{stroke-dasharray:none;stroke-width:1.4} .flow.arch .fb.mod{stroke-dasharray:5 3}
+.flow.arch .fe.med{stroke-dasharray:none} .flow.arch .fe.mod{stroke-dasharray:5 3}
+.flow.A.arch .fb.med,.flow.B.arch .fb.med{stroke:var(--b)} .flow.B.arch .fe.med{stroke:var(--b)}
+.flow.arch .fe.mod{stroke:var(--muted)}
+@media (max-width:640px){.step{grid-template-columns:1fr}.step .no{border-right:0;border-bottom:1px solid var(--rule);display:flex;gap:12px;align-items:baseline}.wrap{padding:24px 16px 80px}}
+@media (prefers-reduced-motion:no-preference){.tab{transition:background .15s}}
+</style>
+
+<div class="wrap">
+<header>
+  <div class="eyebrow">中國效應 2026 CAWI・插入題 26 之後、題 27 之前</div>
+  <h1>普發現金一萬元實驗題組・逐項操作表</h1>
+  <p class="lede">三種方案（框架實驗、情緒實驗、conjoint）各自列出受訪者依序看到的每一頁、每一題的文字與選項，以及平台設定與資料欄位。題號沿用手冊與設計書。新增題上限十題，原問卷既有題不計；25′ 為重測，保守計入；情緒四項各計一題。</p>
+</header>
+
+<h2 style="margin-top:0">研究動機</h2>
+<p>2025 年 7 月與 8 月兩波大罷免全數未通過。罷免的動員敘事是「中國威脅」，全體民眾都暴露在這個框架下，因此罷免本身的效果無法隨機估計。罷免留下一個可以隨機化的問題：威脅框架經全面動員又遭挫敗後，對一個原本與中國無關的新議題還剩多少說服力，對誰有效，對誰反噬。</p>
+<p>普發現金一萬元就是這個新議題，而且十八個月內發生兩次。2025 年的一萬元來自稅收超徵與特別預算，由在野黨在立法院主推。2026 年 8 月賴清德總統宣布以「AI 紅利，全民共享」在總預算編列 2,357 億元再普發一萬元，改由執政黨主導。同一筆錢的政策所有權一年內從藍翻綠。中國威脅框架在這場辯論裡同時用來反對與支持發錢：民進黨立委沈伯洋曾批評在野黨刪預算又要求舉債普發，會落入中共「先窮台、再統一」的戰略；2026 年在野黨以此反擊民進黨前後矛盾，沈伯洋回應標準未變。補償論與排擠論的對立正在台灣輿論場發生。</p>
+<p>政策所有權翻面讓 cross-pressure 換了方向。2025 年是藍色政策配綠色框架，2026 年變成綠色政策配綠色框架。綠營支持者兩者同向，張力轉到藍營身上。藍營支持者面對自己去年要過的錢，今年由民進黨發，再包上中國威脅語言，會因「錢是自己要的」而接受，或因「框架是對手的」而退縮。後者就是反噬，是罷免失敗在個體層次的殘影。兩大陣營都公開支持過普發，政策所有權不再混淆框架效果。</p>
+<p>中國效應調查 2026 是檢驗這個問題最合適的載體。問卷前段已測量威脅感知、認同、統獨、國防態度、政黨認同與所得，全部在模組之前；調查又在 2026 年底縣市長選舉前執行。把分配政策放進中國效應問卷，問的是中國威脅滲進國內分配政治多深，不是民眾要不要錢。</p>
+<h2>理論關係</h2>
+<p>威脅框架進入民眾判斷後走三條路。前兩條預測相反，第三條是機制。</p>
+<p><b>補償論</b>（Rodrik 1998；Ruggie 1982）：外部風險升高時，民眾要求政府提供緩衝，政府以移轉性支付換取承擔風險的正當性。威脅框架應提高現金支持。</p>
+<p><b>排擠論</b>（guns-vs-butter，Russett 1982）：威脅讓民眾把資源優先讓給國防，現金成為國防的替代品。威脅框架應降低現金支持並抬高國防支持。台灣兩種壓力同時到頂，H1 方向開放；25′ 減 25 的國防重測是分辨兩條路的關鍵。「窮台說」是排擠論的輿論版本，把發錢本身定義成削弱國防。原題 37、38 在模組之後，可當反向框架與政黨信任的外溢依變項。</p>
+<p><b>情緒中介</b>（Druckman &amp; McDermott 2008；Lerner &amp; Keltner 2001）：損失框架經焦慮、獲益框架經希望改變選擇。威脅框架預期經焦慮、紅利框架經希望影響支持度。若主效果為零而情緒路徑顯著，表示框架有感但不再轉成支持，即「威脅疲勞」。</p>
+<p><b>政黨線索與框架交互</b>（Slothuus &amp; de Vreese 2010）：同一框架由不同政黨背書時，效果隨受訪者政黨認同逆轉。本研究不操弄政黨，而以 2026 年普發已是執政黨政策、中國威脅又是執政黨語言為背景，用前測政黨認同與威脅接受度指數（題 18、24、26–31）作調節。關鍵格子是「非綠營但威脅感知高」：他們同意威脅存在，卻未必接受執政黨用威脅正當化發錢，正是罷免失敗的群體。</p>
+<p>三種題組對應三個研究問題，不混用。方案 A 操弄「為何發 × 發給誰」，問框架改變評價的方向與大小，不測機制。方案 B 在同一句型加情緒子句（威脅＋恐懼／威脅＋憤怒／紅利＋希望）對無框架，緊接刺激測離散情緒，問損失與獲益框架各經哪種情緒起作用，恐懼與憤怒是否把現金與國防推往相反方向。方案 C 讓受訪者在隨機組合的方案間選擇，問訴求與分配的相對重要性，接軌潘老師的方法但無無框架基準。三案三選一，各用滿 N≈3,000；A 與 B 共用句型與對象詞位，可跨研究對照。</p>
+<div class="note">文獻皆已核實：Rodrik 1998 <i>JPE</i> 106(5)；Ruggie 1982 <i>IO</i> 36(2)；Russett 1982 <i>APSR</i> 76(4)；Druckman &amp; McDermott 2008 <i>Political Behavior</i> 30(3)；Lerner &amp; Keltner 2001 <i>JPSP</i> 81(1)；Slothuus &amp; de Vreese 2010 <i>JOP</i> 72(3)；Hainmueller, Hopkins &amp; Yamamoto 2014 <i>Political Analysis</i> 22(1)。DOI 見實驗手冊文獻總覽。</div>
+
+<h2>題組操作</h2>
+<div class="common">
+  <div class="eyebrow">共通設定・三案皆適用</div>
+  <ul>
+    <li><b>位置</b>：原題 26 答完後進入模組，結束後接回題 27。前測調節變項（題 7、11/12、18/19、24/25、35/36、47）全在模組之前，不動。</li>
+    <li><b>頁首指示語</b>（模組第一頁）：「接下來我們想請您閱讀一段關於政府發放現金的說明，並回答幾個問題。」方案 C 改為「比較兩種政府可能採取的現金發放方案」。</li>
+    <li><b>單一詞位最小配對</b>：所有刺激共用句型「行政院表示，考量到【對象】，政府決定以這筆錢直接支持民眾，因此【分配】發放這筆現金。」各組只換【對象】：「中國大陸持續對台灣軍事與經濟施壓帶來的威脅」（21 字）或「近年 AI 產業持續帶動經濟成長帶來的紅利」（18 字）。損益語氣由尾字「威脅」「紅利」承載，其餘字句全同，避免其他描述稀釋操弄。B 案只在對象之後插入情緒子句。</li>
+    <li><b>真實背景句</b>：各組共用「行政院在今年中央政府總預算中編列經費，規劃發放現金一萬元。」，對應 2026 年 8 月宣布的這一次。背景句不寫「AI 紅利」「不舉債」，官方框架留給 E3/E4。操弄只動後面的詮釋句。</li>
+    <li><b>平台</b>：Qualtrics Randomizer 均分、組別寫入嵌入資料 <span class="var">exp_group</span>；刺激頁無「上一頁」、最短停留 3 秒、字級加大單獨置中；記錄每頁停留秒數 <span class="var">t_stim</span>。</li>
+    <li><b>依變項固定順序</b>：理由贊成 → 操弄檢核 → 整體支持 → 再次普發意願 → 國防經費重測。情緒題只在 B 案，緊接刺激、先於所有評價題。操弄檢核不可返回。政黨信任不重測，原題 37 在模組之後直接當外溢依變項。</li>
+    <li><b>原問卷題不占新增額度</b>：前測調節（題 7、11/12、18–22、35/36、44/47）與後測外溢（題 27–34、37、38、40、41）都是原本就問的題，見文末替代測量。</li>
+    <li><b>分析用前測欄位</b>：威脅接受度指數＝題 18、24、26–31 合成；政黨認同＝題 35/36；所得＝題 47；國防基線＝題 25；Z0 縣市鄉鎮可對應 2025 罷免選區。</li>
+  </ul>
+</div>
+
+<div class="tabs" role="tablist">
+  <button class="tab" role="tab" data-d="A" aria-selected="true">方案 A・框架實驗</button>
+  <button class="tab" role="tab" data-d="B" aria-selected="false">方案 B・情緒實驗</button>
+  <button class="tab" role="tab" data-d="C" aria-selected="false">方案 C・Conjoint</button>
+</div>
+
+<!-- ============ A ============ -->
+<section class="pane A" data-pane="A">
+  <div class="meta">
+    <div><b>設計</b>框架實驗：2（理由）× 2（分配）＋ E0，between-subjects</div>
+    <div><b>每組</b>≈600 人（N≈3,000）</div>
+    <div><b>新增題數</b>6 ／ 上限 10（含 25′；不含情緒題）</div>
+    <div><b>主要依變項</b>26-4 整體支持・26-4b 再次普發</div>
+  </div>
+  <div class="path A">
+    <div class="eyebrow">解釋路徑</div>
+    <div class="prow"><span class="pk">操弄</span><span class="pv">政府給的理由（威脅／紅利／無）× 發給誰（普發／排富）</span></div><div class="prow"><span class="pk">機制</span><span class="pv">不測機制，只問框架改變評價的方向與大小，以及兩維度是否交互</span></div><div class="prow"><span class="pk">結果</span><span class="pv">26-4／26-4b 支持度、25′−25 國防經費位移</span></div><div class="prow"><span class="pk">調節</span><span class="pv">前測政黨認同、威脅接受度指數、所得（題 47）</span></div>
+    <div class="pcan"><b>能說</b>威脅框架相對無框架有效、失效或反噬；排富是否比普發難接受；高所得者是否反對排富；威脅框架抬高國防（rally）或壓低現金（排擠）。</div>
+    <div class="pcan"><b>不能說</b>為何有效或反噬。交互顯著時只能描述型態，機制留給 B 案。</div>
+  </div>
+
+  <figure class="archfig"><figcaption class="eyebrow">實驗架構圖</figcaption><svg class="flow arch A" viewBox="0 0 1000 400" role="img" aria-label="方案 A 架構・框架實驗（2×2＋E0）：操弄 → 評價，無中介，前測調節">
+<defs><marker id="am-A" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="fmk"/></marker></defs>
+<text class="fcap" x="0" y="16" text-anchor="start">方案 A 架構・框架實驗（2×2＋E0）：操弄 → 評價，無中介，前測調節</text>
+<rect class="fb arm" x="0" y="70" width="230" height="64" rx="7"/>
+<text class="ft" x="115.0" y="98.5" text-anchor="middle">理由框架 IV₁</text>
+<text class="fs" x="115.0" y="114.5" text-anchor="middle">威脅 E1/E2・紅利 E3/E4・無 E0</text>
+<rect class="fb arm" x="0" y="180" width="230" height="64" rx="7"/>
+<text class="ft" x="115.0" y="208.5" text-anchor="middle">分配方式 IV₂</text>
+<text class="fs" x="115.0" y="224.5" text-anchor="middle">普發 E1/E3・排富 E2/E4</text>
+<path class="fb rnd" d="M335,105 L395,150 L335,195 L275,150 z"/>
+<text class="ft" x="335" y="146" text-anchor="middle">理由</text>
+<text class="ft" x="335" y="161" text-anchor="middle">× 分配</text>
+<rect class="fb dv" x="700" y="50" width="300" height="60" rx="7"/>
+<text class="ft" x="850.0" y="76.5" text-anchor="middle">現金支持度 DV₁</text>
+<text class="fs" x="850.0" y="92.5" text-anchor="middle">26-4 整體・26-4b 再次普發（主）</text>
+<rect class="fb dv" x="700" y="150" width="300" height="60" rx="7"/>
+<text class="ft" x="850.0" y="176.5" text-anchor="middle">國防經費位移 DV₂</text>
+<text class="fs" x="850.0" y="192.5" text-anchor="middle">25′ − 題25（排擠 − ／ rally ＋）</text>
+<rect class="fb pre" x="700" y="250" width="300" height="50" rx="7"/>
+<text class="ft" x="850.0" y="271.5" text-anchor="middle">外溢 DV（免費）</text>
+<text class="fs" x="850.0" y="287.5" text-anchor="middle">原題 27–34・37・38・40・41</text>
+<path class="fe arm" d="M230,90 C465.0,90 465.0,70 700,70" marker-end="url(#am-A)"/>
+<text class="fl" x="460" y="62" text-anchor="middle">H1 威脅 vs E0（＋補償／－排擠／0 失效）・H5 紅利 ＋</text>
+<path class="fe arm" d="M230,120 C465.0,120 465.0,170 700,170" marker-end="url(#am-A)"/>
+<text class="fl" x="430" y="130" text-anchor="middle">H4 ±</text>
+<path class="fe arm" d="M230,212 C465.0,212 465.0,95 700,95" marker-end="url(#am-A)"/>
+<text class="fl" x="540" y="190" text-anchor="middle">H3 排富 −</text>
+<path class="fe " d="M395,150 C547.5,150 547.5,85 700,85" marker-end="url(#am-A)"/>
+<text class="fl" x="560" y="112" text-anchor="middle">交互（探索）</text>
+<path class="fe " d="M230,230 C465.0,230 465.0,275 700,275" marker-end="url(#am-A)"/>
+<text class="fl" x="470" y="262" text-anchor="middle">外溢（組間比較）</text>
+<rect class="fb mod" x="0" y="310" width="200" height="50" rx="7"/>
+<text class="ft" x="100.0" y="331.5" text-anchor="middle">政黨認同 MOD</text>
+<text class="fs" x="100.0" y="347.5" text-anchor="middle">題 35/36</text>
+<rect class="fb mod" x="220" y="310" width="230" height="50" rx="7"/>
+<text class="ft" x="335.0" y="331.5" text-anchor="middle">威脅接受度指數 MOD</text>
+<text class="fs" x="335.0" y="347.5" text-anchor="middle">題 18、24、26–31 合成</text>
+<rect class="fb mod" x="470" y="310" width="160" height="50" rx="7"/>
+<text class="ft" x="550.0" y="331.5" text-anchor="middle">所得 MOD</text>
+<text class="fs" x="550.0" y="347.5" text-anchor="middle">題 47（＋題 44）</text>
+<path class="fe mod" d="M100,310 C260.0,310 260.0,100 420,100" marker-end="url(#am-A)"/>
+<text class="fl" x="150" y="272" text-anchor="start">H2 反噬：非綠營 × 威脅 → 負</text>
+<path class="fe mod" d="M335,310 C392.5,310 392.5,102 450,102" marker-end="url(#am-A)"/>
+<path class="fe mod" d="M550,310 C535.0,310 535.0,182 520,182" marker-end="url(#am-A)"/>
+<text class="fl" x="600" y="250" text-anchor="start">H6 所得 × 排富</text>
+<path class="fe arm" d="M0,388 L34,388"/>
+<text class="fl" x="40" y="392" text-anchor="start">隨機操弄的直接效果</text>
+<path class="fe " d="M165,388 L199,388"/>
+<text class="fl" x="205" y="392" text-anchor="start">交互／外溢</text>
+<path class="fe mod" d="M286,388 L320,388"/>
+<text class="fl" x="326" y="392" text-anchor="start">前測調節（觀察性）</text>
+</svg></figure>
+
+  <figure class="flowfig"><svg class="flow A" viewBox="0 0 1000 400" role="img" aria-label="方案 A 流程・框架實驗 2×2＋控制組，between-subjects">
+<defs><marker id="fm-A" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="fmk"/></marker></defs>
+<text class="fcap" x="0" y="16" text-anchor="start">方案 A 流程・框架實驗 2×2＋控制組，between-subjects</text>
+<rect class="fb pre" x="0" y="170" width="150" height="70" rx="6"/>
+<text class="ft" x="75.0" y="193.5" text-anchor="middle">前測 題 1–26</text>
+<text class="fs" x="75.0" y="209.5" text-anchor="middle">威脅感知・認同</text>
+<text class="fs" x="75.0" y="225.5" text-anchor="middle">政黨・所得・題25</text>
+<path class="fe " d="M150,205 L190,205" marker-end="url(#fm-A)"/>
+<rect class="fb " x="190" y="180" width="120" height="50" rx="6"/>
+<text class="ft" x="250.0" y="201.5" text-anchor="middle">頁首指示語</text>
+<text class="fs" x="250.0" y="217.5" text-anchor="middle">無返回鍵</text>
+<path class="fe " d="M310,205 L350,205" marker-end="url(#fm-A)"/>
+<path class="fb rnd" d="M410,165 L470,205 L410,245 L350,205 z"/>
+<text class="ft" x="410" y="201" text-anchor="middle">隨機</text>
+<text class="ft" x="410" y="216" text-anchor="middle">分派</text>
+<text class="fmono" x="410" y="260" text-anchor="middle">exp_group</text>
+<path class="fe arm" d="M470,205 C495.0,205 495.0,97.0 520,97.0" marker-end="url(#fm-A)"/>
+<rect class="fb arm" x="520" y="75.0" width="210" height="44" rx="6"/>
+<text class="ft" x="625.0" y="93.5" text-anchor="middle">E1　威脅 × 普發</text>
+<text class="fs" x="625.0" y="109.5" text-anchor="middle">≈600</text>
+<path class="fe arm" d="M730,97.0 C755.0,97.0 755.0,60 780,60" marker-end="url(#fm-A)"/>
+<path class="fe arm" d="M470,205 C495.0,205 495.0,151.0 520,151.0" marker-end="url(#fm-A)"/>
+<rect class="fb arm" x="520" y="129.0" width="210" height="44" rx="6"/>
+<text class="ft" x="625.0" y="147.5" text-anchor="middle">E2　威脅 × 排富</text>
+<text class="fs" x="625.0" y="163.5" text-anchor="middle">≈600</text>
+<path class="fe arm" d="M730,151.0 C755.0,151.0 755.0,60 780,60" marker-end="url(#fm-A)"/>
+<path class="fe arm" d="M470,205 L520,205.0" marker-end="url(#fm-A)"/>
+<rect class="fb arm" x="520" y="183.0" width="210" height="44" rx="6"/>
+<text class="ft" x="625.0" y="201.5" text-anchor="middle">E3　紅利 × 普發</text>
+<text class="fs" x="625.0" y="217.5" text-anchor="middle">≈600</text>
+<path class="fe arm" d="M730,205.0 C755.0,205.0 755.0,60 780,60" marker-end="url(#fm-A)"/>
+<path class="fe arm" d="M470,205 C495.0,205 495.0,259.0 520,259.0" marker-end="url(#fm-A)"/>
+<rect class="fb arm" x="520" y="237.0" width="210" height="44" rx="6"/>
+<text class="ft" x="625.0" y="255.5" text-anchor="middle">E4　紅利 × 排富</text>
+<text class="fs" x="625.0" y="271.5" text-anchor="middle">≈600</text>
+<path class="fe arm" d="M730,259.0 C755.0,259.0 755.0,60 780,60" marker-end="url(#fm-A)"/>
+<path class="fe arm" d="M470,205 C495.0,205 495.0,313.0 520,313.0" marker-end="url(#fm-A)"/>
+<rect class="fb arm" x="520" y="291.0" width="210" height="44" rx="6"/>
+<text class="ft" x="625.0" y="309.5" text-anchor="middle">E0　控制：僅背景句</text>
+<text class="fs" x="625.0" y="325.5" text-anchor="middle">≈600</text>
+<path class="fe arm" d="M730,313.0 C755.0,313.0 755.0,60 780,60" marker-end="url(#fm-A)"/>
+<text class="fl" x="625.0" y="65.0" text-anchor="middle">26-1 刺激頁・最短停留 3 秒</text>
+<rect class="fb " x="780" y="40" width="200" height="36" rx="6"/>
+<text class="ft" x="880.0" y="62.5" text-anchor="middle">26-2 理由贊成</text>
+<path class="fe " d="M880.0,76 L880.0,86" marker-end="url(#fm-A)"/>
+<rect class="fb chk" x="780" y="86" width="200" height="36" rx="6"/>
+<text class="ft" x="880.0" y="100.5" text-anchor="middle">26-3a／3b 檢核</text>
+<text class="fs" x="880.0" y="116.5" text-anchor="middle">順序隨機・不可返回</text>
+<path class="fe " d="M880.0,122 L880.0,132" marker-end="url(#fm-A)"/>
+<rect class="fb dv" x="780" y="132" width="200" height="36" rx="6"/>
+<text class="ft" x="880.0" y="154.5" text-anchor="middle">26-4 整體支持</text>
+<text class="fstar" x="972" y="145" text-anchor="end">★</text>
+<path class="fe " d="M880.0,168 L880.0,178" marker-end="url(#fm-A)"/>
+<rect class="fb dv" x="780" y="178" width="200" height="36" rx="6"/>
+<text class="ft" x="880.0" y="200.5" text-anchor="middle">26-4b 再次普發意願</text>
+<path class="fe " d="M880.0,214 L880.0,224" marker-end="url(#fm-A)"/>
+<rect class="fb dv" x="780" y="224" width="200" height="36" rx="6"/>
+<text class="ft" x="880.0" y="246.5" text-anchor="middle">25′ 國防經費重測</text>
+<path class="fe " d="M880,260 L880,282" marker-end="url(#fm-A)"/>
+<rect class="fb pre" x="800" y="282" width="160" height="30" rx="6"/>
+<text class="ft" x="880.0" y="301.5" text-anchor="middle">接回原問卷 題 27–49</text>
+<text class="fl" x="880" y="30" text-anchor="middle">測量序列・固定順序</text>
+</svg></figure>
+
+  <div class="step"><div class="no"><div class="id">分派</div><div class="role">平台端</div></div><div class="body">
+    <div class="title">Randomizer 均分五組，寫入 <span class="var">exp_group</span>＝E0／E1／E2／E3／E4</div>
+    <div class="note">另寫入兩個因子欄位 <span class="var">f_reason</span>（threat／bonus／none）、<span class="var">f_dist</span>（universal／meanstest／none）。</div>
+  </div></div>
+
+  <div class="step"><div class="no"><div class="id">26-1</div><div class="role">IV・刺激頁</div></div><div class="body">
+    <div class="title">依組別顯示其中一段，單獨一頁，最短停留 3 秒，無返回鍵</div>
+    <div class="arm"><span class="tag">E1 威脅×普發</span><span class="n">≈600</span>行政院在今年中央政府總預算中編列經費，規劃發放現金一萬元。行政院表示，考量到<mark>中國大陸持續對台灣軍事與經濟施壓帶來的威脅</mark>，政府決定以這筆錢直接支持民眾，因此<mark>不分所得高低</mark>發放這筆現金。</div>
+    <div class="arm"><span class="tag">E2 威脅×排富</span><span class="n">≈600</span>行政院在今年中央政府總預算中編列經費，規劃發放現金一萬元。行政院表示，考量到<mark>中國大陸持續對台灣軍事與經濟施壓帶來的威脅</mark>，政府決定以這筆錢直接支持民眾，因此<mark>排除所得較高者</mark>發放這筆現金。</div>
+    <div class="arm"><span class="tag">E3 紅利×普發</span><span class="n">≈600</span>行政院在今年中央政府總預算中編列經費，規劃發放現金一萬元。行政院表示，考量到<mark>近年 AI 產業持續帶動經濟成長帶來的紅利</mark>，政府決定以這筆錢直接支持民眾，因此<mark>不分所得高低</mark>發放這筆現金。</div>
+    <div class="arm"><span class="tag">E4 紅利×排富</span><span class="n">≈600</span>行政院在今年中央政府總預算中編列經費，規劃發放現金一萬元。行政院表示，考量到<mark>近年 AI 產業持續帶動經濟成長帶來的紅利</mark>，政府決定以這筆錢直接支持民眾，因此<mark>排除所得較高者</mark>發放這筆現金。</div>
+    <div class="arm"><span class="tag">E0 控制</span><span class="n">≈600</span>行政院在今年中央政府總預算中編列經費，規劃發放現金一萬元。</div>
+    <div class="note"><b>操作重點</b>：兩個詞位各自替換，其餘字句相同；E0 只有背景句。E3 對應政府實際的「AI 紅利」說法，E1 是本研究設定的框架。刺激後直接進 26-2，不插情緒題，避免情緒自評成為第二個刺激。</div>
+  </div></div>
+
+  <div class="step"><div class="no"><div class="id">26-2</div><div class="role">DV・理由贊成</div></div><div class="body">
+    <div class="say"><div class="who">E1–E4</div>請問您贊不贊成政府用這個理由發放現金一萬元？</div>
+    <div class="say"><div class="who">控制組（平台代入）</div>請問您贊不贊成政府發放這筆現金一萬元？</div>
+    <div class="opts"><span>很贊成</span><span>贊成</span><span>不贊成</span><span>很不贊成</span><span>沒意見／不知道</span></div>
+  </div></div>
+
+  <div class="step"><div class="no"><div class="id">26-3a</div><div class="role">CHECK・理由</div></div><div class="body">
+    <div class="say"><div class="who">題目</div>請問您剛剛讀到的說明中，政府提到的理由，比較接近：</div>
+    <div class="opts"><span>因應中國大陸的軍事／經濟威脅</span><span>近年 AI 帶動的經濟成長</span><span>沒有特別提到理由</span><span>不記得／不確定</span></div>
+  </div></div>
+
+  <div class="step"><div class="no"><div class="id">26-3b</div><div class="role">CHECK・分配</div></div><div class="body">
+    <div class="say"><div class="who">題目</div>請問您剛剛讀到的說明中，這筆現金的發放方式，比較接近：</div>
+    <div class="opts"><span>每個人都可以領，不分所得高低</span><span>所得較高者不能領（排富）</span><span>沒有特別提到發放方式</span><span>不記得／不確定</span></div>
+    <div class="note">26-3a／3b <b>順序隨機互換</b>、皆必答、不可返回。期望答案：E1 威脅＋不分所得；E2 威脅＋排富；E3 紅利＋不分所得；E4 紅利＋排富；<b>E0 兩題皆「沒有特別提到」</b>。</div>
+  </div></div>
+
+  <div class="step"><div class="no"><div class="id">26-4</div><div class="role">DV 主</div></div><div class="body">
+    <div class="say"><div class="who">題目・全組文字相同</div>整體而言，請問您支不支持普發現金一萬元這項政策？</div>
+    <div class="opts"><span>很支持</span><span>支持</span><span>不支持</span><span>很不支持</span><span>沒意見／不知道</span></div>
+  </div></div>
+
+  <div class="step"><div class="no"><div class="id">26-4b</div><div class="role">DV・前瞻</div></div><div class="body">
+    <div class="say"><div class="who">題目・全組文字相同</div>未來如果政府財政狀況允許，請問您支不支持再次普發現金？</div>
+    <div class="opts"><span>很支持</span><span>支持</span><span>不支持</span><span>很不支持</span><span>沒意見／不知道</span></div>
+    <div class="note">受訪時多數人已領到 2026 年的一萬元，26-4 可能接近天花板。本題把評價移到未來，作替代主依變項。</div>
+  </div></div>
+
+  <div class="step"><div class="no"><div class="id">25′</div><div class="role">DV・重測</div></div><div class="body">
+    <div class="say"><div class="who">題目・與原題 25 同文</div>承上題，請問您贊不贊成政府編列預算增加國防經費？</div>
+    <div class="opts"><span>非常贊成</span><span>贊成</span><span>不太贊成</span><span>非常不贊成</span><span>無意見</span></div>
+    <div class="note">分析用 25′ 減題 25 的個人內差。答完接回題 27；原題 27–41 為外溢依變項。</div>
+  </div></div>
+
+  <h3>方案 A 分析對應</h3>
+  <p class="kicker">主效果：26-4、26-4b 五組 OLS，對比 E1E2 vs E0（威脅）、E3E4 vs E0（紅利）、E2E4 vs E1E3（分配）。交互：理由 × 分配；理由 × 政黨認同、× 威脅接受度（反噬）；排富 × 所得。排擠：(25′ − 25) 組間差。穩健性：排除 26-3a／3b 未通過者。第七題優先補 37′。</p>
+</section>
+
+<!-- ============ B ============ -->
+<section class="pane B" data-pane="B" hidden>
+  <div class="meta">
+    <div><b>設計</b>情緒實驗：三種情緒訴求（威脅＋恐懼／威脅＋憤怒／紅利＋希望）＋ F0，四組 between-subjects</div>
+    <div><b>每組</b>≈750 人（N≈3,000）；兩組對比可偵測 d≈0.15</div>
+    <div><b>新增題數</b>9 ／ 上限 10（情緒 4 項各計 1 題，含 25′）</div>
+    <div><b>主要依變項</b>26-1b 離散情緒（中介）→ 26-4／25′</div>
+  </div>
+  <div class="path B">
+    <div class="eyebrow">解釋路徑</div>
+    <div class="prow"><span class="pk">操弄</span><span class="pv">對象詞位＋情緒子句：威脅＋恐懼、威脅＋憤怒、紅利＋希望，對無框架 F0。不設事實版組，情緒子句的增量不在本案分解</span></div><div class="prow"><span class="pk">機制</span><span class="pv">緊接刺激測離散情緒：焦慮、生氣、樂觀為目標情緒，欣慰為次要</span></div><div class="prow"><span class="pk">結果</span><span class="pv">26-4／26-4b 支持度、25′−25 國防經費位移</span></div><div class="prow"><span class="pk">預測</span><span class="pv">恐懼 → 焦慮 ↑ → 風險趨避 → 現金 ↑、國防 ↑（補償）；憤怒 → 生氣 ↑ → 趨近與懲罰 → 國防 ↑、現金 ↓ 或不變（排擠）；希望 → 樂觀 ↑ → 現金 ↑、國防不變（獲益框架）；F0 為基準</span></div>
+    <div class="pcan"><b>能說</b>威脅框架經哪種情緒起作用；同一威脅以恐懼或憤怒表述，對現金與國防的效果是否分岔；紅利框架是否走希望路徑；損失與獲益框架的情緒機制是否不同。</div>
+    <div class="pcan"><b>不能說</b>分配方式的效果（不操弄排富）；情緒子句相對純事實陳述的增量（無事實版組，只能與 A 案 E1／E3 跨研究比較）。中介量是測量不是操弄，a×b 間接效果屬觀察性推論，報告時須說明。</div>
+  </div>
+
+  <figure class="archfig"><figcaption class="eyebrow">實驗架構圖</figcaption><svg class="flow arch B" viewBox="0 0 1000 470" role="img" aria-label="方案 B 架構・情緒實驗：對象 × 情緒子句 → 離散情緒 → 評價（中介）">
+<defs><marker id="am-B" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="fmk"/></marker></defs>
+<text class="fcap" x="0" y="16" text-anchor="start">方案 B 架構・情緒實驗：對象 × 情緒子句 → 離散情緒 → 評價（中介）</text>
+<rect class="fb arm" x="0" y="48" width="220" height="52" rx="7"/>
+<text class="ft" x="110.0" y="70.5" text-anchor="middle">F1 威脅＋恐懼</text>
+<text class="fs" x="110.0" y="86.5" text-anchor="middle">不確定・失控　≈750</text>
+<rect class="fb arm" x="0" y="140" width="220" height="52" rx="7"/>
+<text class="ft" x="110.0" y="162.5" text-anchor="middle">F2 威脅＋憤怒</text>
+<text class="fs" x="110.0" y="178.5" text-anchor="middle">蓄意打壓・不公　≈750</text>
+<rect class="fb arm" x="0" y="240" width="220" height="52" rx="7"/>
+<text class="ft" x="110.0" y="262.5" text-anchor="middle">G1 紅利＋希望</text>
+<text class="fs" x="110.0" y="278.5" text-anchor="middle">前景打開・越來越好　≈750</text>
+<rect class="fb pre" x="0" y="338" width="220" height="40" rx="7"/>
+<text class="ft" x="110.0" y="354.5" text-anchor="middle">F0 控制</text>
+<text class="fs" x="110.0" y="370.5" text-anchor="middle">僅背景句　≈750</text>
+<rect class="fb med" x="380" y="40" width="200" height="56" rx="7"/>
+<text class="ft" x="480.0" y="64.5" text-anchor="middle">焦慮／擔心 MED₁</text>
+<text class="fs" x="480.0" y="80.5" text-anchor="middle">26-1b・緊接刺激</text>
+<rect class="fb med" x="380" y="140" width="200" height="56" rx="7"/>
+<text class="ft" x="480.0" y="164.5" text-anchor="middle">生氣／不滿 MED₂</text>
+<text class="fs" x="480.0" y="180.5" text-anchor="middle">26-1b・緊接刺激</text>
+<rect class="fb med" x="380" y="240" width="200" height="56" rx="7"/>
+<text class="ft" x="480.0" y="264.5" text-anchor="middle">樂觀／希望 MED₃</text>
+<text class="fs" x="480.0" y="280.5" text-anchor="middle">26-1b・緊接刺激</text>
+<rect class="fb pre" x="380" y="330" width="200" height="40" rx="7"/>
+<text class="ft" x="480.0" y="346.5" text-anchor="middle">欣慰（次要）</text>
+<text class="fs" x="480.0" y="362.5" text-anchor="middle">不入主模型</text>
+<rect class="fb dv" x="760" y="70" width="240" height="60" rx="7"/>
+<text class="ft" x="880.0" y="96.5" text-anchor="middle">現金支持度 DV₁</text>
+<text class="fs" x="880.0" y="112.5" text-anchor="middle">26-4・26-4b</text>
+<rect class="fb dv" x="760" y="220" width="240" height="60" rx="7"/>
+<text class="ft" x="880.0" y="246.5" text-anchor="middle">國防經費位移 DV₂</text>
+<text class="fs" x="880.0" y="262.5" text-anchor="middle">25′ − 題25</text>
+<path class="fe arm" d="M220,74 C300.0,74 300.0,68 380,68" marker-end="url(#am-B)"/>
+<text class="fl" x="300" y="60" text-anchor="middle">a₁ ＋</text>
+<path class="fe arm" d="M220,166 C300.0,166 300.0,168 380,168" marker-end="url(#am-B)"/>
+<text class="fl" x="300" y="158" text-anchor="middle">a₂ ＋</text>
+<path class="fe arm" d="M220,266 C300.0,266 300.0,268 380,268" marker-end="url(#am-B)"/>
+<text class="fl" x="300" y="258" text-anchor="middle">a₃ ＋</text>
+<path class="fe med" d="M580,60 C670.0,60 670.0,90 760,90" marker-end="url(#am-B)"/>
+<text class="fl" x="670" y="62" text-anchor="middle">b₁ ＋ 風險趨避→要緩衝</text>
+<path class="fe med" d="M580,80 C670.0,80 670.0,235 760,235" marker-end="url(#am-B)"/>
+<text class="fl" x="700" y="150" text-anchor="middle">b₁′ ＋ 也要防衛</text>
+<path class="fe med" d="M580,160 C670.0,160 670.0,255 760,255" marker-end="url(#am-B)"/>
+<text class="fl" x="650" y="212" text-anchor="middle">b₂ ＋ 趨近→懲罰／防衛</text>
+<path class="fe med" d="M580,175 C670.0,175 670.0,115 760,115" marker-end="url(#am-B)"/>
+<text class="fl" x="700" y="186" text-anchor="middle">b₂′ －／0 零和</text>
+<path class="fe med" d="M580,268 C670.0,268 670.0,125 760,125" marker-end="url(#am-B)"/>
+<text class="fl" x="650" y="282" text-anchor="middle">b₃ ＋ 獲益→支持；國防不變</text>
+<path class="fe " d="M220,358 Q490.0,311.5 760,125" marker-end="url(#am-B)"/>
+<text class="fl" x="470" y="400" text-anchor="middle">c′ 各組對 F0 的直接效果（扣除情緒中介後的殘餘）；無事實版組，情緒子句增量不在本案分解</text>
+<rect class="fb mod" x="620" y="320" width="250" height="50" rx="7"/>
+<text class="ft" x="745.0" y="341.5" text-anchor="middle">政黨認同 × 威脅接受度 MOD</text>
+<text class="fs" x="745.0" y="357.5" text-anchor="middle">題 35/36・題 18、24、26–31</text>
+<path class="fe mod" d="M700,320 C695.0,320 695.0,250 690,250" marker-end="url(#am-B)"/>
+<text class="fl" x="745" y="300" text-anchor="start">b₂ 在非綠營是否轉成反噬</text>
+<path class="fe arm" d="M0,458 L34,458"/>
+<text class="fl" x="40" y="462" text-anchor="start">a：訴求 → 情緒</text>
+<path class="fe med" d="M165,458 L199,458"/>
+<text class="fl" x="205" y="462" text-anchor="start">b：情緒 → 評價</text>
+<path class="fe " d="M330,458 L364,458"/>
+<text class="fl" x="370" y="462" text-anchor="start">c′ 直接效果</text>
+<path class="fe mod" d="M473,458 L507,458"/>
+<text class="fl" x="513" y="462" text-anchor="start">調節式中介</text>
+</svg></figure>
+
+  <figure class="flowfig"><svg class="flow B" viewBox="0 0 1000 400" role="img" aria-label="方案 B 流程・情緒實驗 3 訴求＋控制組，between-subjects">
+<defs><marker id="fm-B" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="fmk"/></marker></defs>
+<text class="fcap" x="0" y="16" text-anchor="start">方案 B 流程・情緒實驗 3 訴求＋控制組，between-subjects</text>
+<rect class="fb pre" x="0" y="170" width="150" height="70" rx="6"/>
+<text class="ft" x="75.0" y="193.5" text-anchor="middle">前測 題 1–26</text>
+<text class="fs" x="75.0" y="209.5" text-anchor="middle">威脅感知・認同</text>
+<text class="fs" x="75.0" y="225.5" text-anchor="middle">政黨・所得・題25</text>
+<path class="fe " d="M150,205 L190,205" marker-end="url(#fm-B)"/>
+<rect class="fb " x="190" y="180" width="120" height="50" rx="6"/>
+<text class="ft" x="250.0" y="201.5" text-anchor="middle">頁首指示語</text>
+<text class="fs" x="250.0" y="217.5" text-anchor="middle">無返回鍵</text>
+<path class="fe " d="M310,205 L350,205" marker-end="url(#fm-B)"/>
+<path class="fb rnd" d="M410,165 L470,205 L410,245 L350,205 z"/>
+<text class="ft" x="410" y="201" text-anchor="middle">隨機</text>
+<text class="ft" x="410" y="216" text-anchor="middle">分派</text>
+<text class="fmono" x="410" y="260" text-anchor="middle">exp_group</text>
+<path class="fe arm" d="M470,205 C495.0,205 495.0,124.0 520,124.0" marker-end="url(#fm-B)"/>
+<rect class="fb arm" x="520" y="102.0" width="210" height="44" rx="6"/>
+<text class="ft" x="625.0" y="120.5" text-anchor="middle">F1　威脅＋恐懼</text>
+<text class="fs" x="625.0" y="136.5" text-anchor="middle">≈750</text>
+<path class="fe arm" d="M730,124.0 C755.0,124.0 755.0,60 780,60" marker-end="url(#fm-B)"/>
+<path class="fe arm" d="M470,205 C495.0,205 495.0,178.0 520,178.0" marker-end="url(#fm-B)"/>
+<rect class="fb arm" x="520" y="156.0" width="210" height="44" rx="6"/>
+<text class="ft" x="625.0" y="174.5" text-anchor="middle">F2　威脅＋憤怒</text>
+<text class="fs" x="625.0" y="190.5" text-anchor="middle">≈750</text>
+<path class="fe arm" d="M730,178.0 C755.0,178.0 755.0,60 780,60" marker-end="url(#fm-B)"/>
+<path class="fe arm" d="M470,205 C495.0,205 495.0,232.0 520,232.0" marker-end="url(#fm-B)"/>
+<rect class="fb arm" x="520" y="210.0" width="210" height="44" rx="6"/>
+<text class="ft" x="625.0" y="228.5" text-anchor="middle">G1　紅利＋希望</text>
+<text class="fs" x="625.0" y="244.5" text-anchor="middle">≈750</text>
+<path class="fe arm" d="M730,232.0 C755.0,232.0 755.0,60 780,60" marker-end="url(#fm-B)"/>
+<path class="fe arm" d="M470,205 C495.0,205 495.0,286.0 520,286.0" marker-end="url(#fm-B)"/>
+<rect class="fb arm" x="520" y="264.0" width="210" height="44" rx="6"/>
+<text class="ft" x="625.0" y="282.5" text-anchor="middle">F0　控制：僅背景句</text>
+<text class="fs" x="625.0" y="298.5" text-anchor="middle">≈750</text>
+<path class="fe arm" d="M730,286.0 C755.0,286.0 755.0,60 780,60" marker-end="url(#fm-B)"/>
+<text class="fl" x="625.0" y="92.0" text-anchor="middle">26-1 對象 × 情緒子句・同一句型</text>
+<rect class="fb med" x="780" y="40" width="200" height="36" rx="6"/>
+<text class="ft" x="880.0" y="54.5" text-anchor="middle">26-1b 離散情緒 ×4</text>
+<text class="fs" x="880.0" y="70.5" text-anchor="middle">緊接刺激・隨機題序</text>
+<path class="fe " d="M880.0,76 L880.0,86" marker-end="url(#fm-B)"/>
+<rect class="fb " x="780" y="86" width="200" height="36" rx="6"/>
+<text class="ft" x="880.0" y="108.5" text-anchor="middle">26-2 理由贊成</text>
+<path class="fe " d="M880.0,122 L880.0,132" marker-end="url(#fm-B)"/>
+<rect class="fb chk" x="780" y="132" width="200" height="36" rx="6"/>
+<text class="ft" x="880.0" y="146.5" text-anchor="middle">26-3e 訴求辨識</text>
+<text class="fs" x="880.0" y="162.5" text-anchor="middle">不可返回</text>
+<path class="fe " d="M880.0,168 L880.0,178" marker-end="url(#fm-B)"/>
+<rect class="fb dv" x="780" y="178" width="200" height="36" rx="6"/>
+<text class="ft" x="880.0" y="200.5" text-anchor="middle">26-4 整體支持</text>
+<text class="fstar" x="972" y="191" text-anchor="end">★</text>
+<path class="fe " d="M880.0,214 L880.0,224" marker-end="url(#fm-B)"/>
+<rect class="fb dv" x="780" y="224" width="200" height="36" rx="6"/>
+<text class="ft" x="880.0" y="246.5" text-anchor="middle">26-4b 再次普發意願</text>
+<path class="fe " d="M880.0,260 L880.0,270" marker-end="url(#fm-B)"/>
+<rect class="fb dv" x="780" y="270" width="200" height="36" rx="6"/>
+<text class="ft" x="880.0" y="292.5" text-anchor="middle">25′ 國防經費重測</text>
+<path class="fe " d="M880,306 L880,328" marker-end="url(#fm-B)"/>
+<rect class="fb pre" x="800" y="328" width="160" height="30" rx="6"/>
+<text class="ft" x="880.0" y="347.5" text-anchor="middle">接回原問卷 題 27–49</text>
+<text class="fl" x="880" y="30" text-anchor="middle">測量序列・固定順序</text>
+</svg></figure>
+
+  <div class="step"><div class="no"><div class="id">分派</div><div class="role">平台端</div></div><div class="body">
+    <div class="title">Randomizer 均分四組，寫入 <span class="var">exp_group</span>＝F0／F1／F2／G1；另寫入 <span class="var">f_emotion</span>（fear／anger／hope／none）</div>
+  </div></div>
+
+  <div class="step"><div class="no"><div class="id">26-1</div><div class="role">IV・刺激頁</div></div><div class="body">
+    <div class="title">依組別顯示其中一段，單獨一頁，最短停留 3 秒，無返回鍵</div>
+    <div class="arm"><span class="tag">F1 威脅＋恐懼</span><span class="n">≈750</span>行政院在今年中央政府總預算中編列經費，規劃發放現金一萬元。行政院表示，考量到中國大陸持續對台灣軍事與經濟施壓帶來的威脅，<mark>情勢充滿不確定，民眾的生活隨時可能受到衝擊</mark>，政府決定以這筆錢直接支持民眾，因此發放這筆現金。</div>
+    <div class="arm"><span class="tag">F2 威脅＋憤怒</span><span class="n">≈750</span>行政院在今年中央政府總預算中編列經費，規劃發放現金一萬元。行政院表示，考量到中國大陸持續對台灣軍事與經濟施壓帶來的威脅，<mark>這些蓄意的打壓不應該由台灣民眾承擔代價</mark>，政府決定以這筆錢直接支持民眾，因此發放這筆現金。</div>
+    <div class="arm"><span class="tag">G1 紅利＋希望</span><span class="n">≈750</span>行政院在今年中央政府總預算中編列經費，規劃發放現金一萬元。行政院表示，考量到近年 AI 產業持續帶動經濟成長帶來的紅利，<mark>台灣的經濟前景正在打開，未來的日子會越來越好</mark>，政府決定以這筆錢直接支持民眾，因此發放這筆現金。</div>
+    <div class="arm"><span class="tag">F0 控制</span><span class="n">≈750</span>行政院在今年中央政府總預算中編列經費，規劃發放現金一萬元。</div>
+    <div class="note"><b>操作重點</b>：句型與 A 案相同，只動對象詞位與情緒子句；子句插在對象之後、目的句之前。紅利只配希望，因獲益框架在文獻中對應 hope。N＝3,000 只夠四組，不設事實版；若團隊要分解情緒子句的增量，可加威脅事實版為第五組，每組降至 600。分配方式一律不提。依 Lerner &amp; Keltner (2001)，恐懼來自不確定與低控制感，憤怒來自明確歸責與不公。</div>
+  </div></div>
+
+  <div class="step"><div class="no"><div class="id">26-1b</div><div class="role">MED・中介</div></div><div class="body">
+    <div class="title">離散情緒四項，緊接刺激之後，全組作答（含 F0）</div>
+    <div class="say"><div class="who">題目</div>請問，讀完剛剛那段說明之後，您感到以下情緒的程度各是多少？</div>
+    <div class="scroll"><table><tr><th></th><th>完全沒有</th><th>很少</th><th>中等</th><th>相當多</th><th>非常強烈</th></tr>
+    <tr><td>焦慮／擔心</td><td>○</td><td>○</td><td>○</td><td>○</td><td>○</td></tr>
+    <tr><td>生氣／不滿</td><td>○</td><td>○</td><td>○</td><td>○</td><td>○</td></tr>
+    <tr><td>欣慰／感激</td><td>○</td><td>○</td><td>○</td><td>○</td><td>○</td></tr>
+    <tr><td>樂觀／有希望</td><td>○</td><td>○</td><td>○</td><td>○</td><td>○</td></tr></table></div>
+    <div class="note">四項<b>隨機題序</b>。焦慮、生氣、樂觀為三條路徑的目標情緒，欣慰為次要指標。欄位 <span class='var'>emo_anx emo_ang emo_rel emo_hop</span>（1–5）。情緒題須在所有評價題之前，否則中介的時間序不成立。</div>
+  </div></div>
+
+  <div class="step"><div class="no"><div class="id">26-2</div><div class="role">DV・理由贊成</div></div><div class="body">
+    <div class="say"><div class="who">F1／F2／G1</div>請問您贊不贊成政府用這個理由發放現金一萬元？</div>
+    <div class="say"><div class="who">控制組（平台代入）</div>請問您贊不贊成政府發放這筆現金一萬元？</div>
+    <div class="opts"><span>很贊成</span><span>贊成</span><span>不贊成</span><span>很不贊成</span><span>沒意見／不知道</span></div>
+  </div></div>
+
+  <div class="step"><div class="no"><div class="id">26-3e</div><div class="role">CHECK・訴求辨識</div></div><div class="body">
+    <div class="say"><div class="who">題目</div>請問您剛剛讀到的說明，給您的感覺比較接近：</div>
+    <div class="opts"><span>提醒情勢不確定、可能受到衝擊</span><span>指出中國的打壓不公平</span><span>強調台灣經濟前景會越來越好</span><span>單純說明發放的理由</span><span>沒有特別提到理由</span><span>不記得／不確定</span></div>
+    <div class="note">不可返回。期望答案 F1＝不確定、F2＝不公平、G1＝前景越來越好、F0＝沒有提到理由；「單純說明發放的理由」為干擾選項。本題檢核訴求被怎麼讀到；情緒是否引發由 26-1b 組間差判定（F1 焦慮、F2 生氣、G1 樂觀各自最高）。</div>
+  </div></div>
+
+  <div class="step"><div class="no"><div class="id">26-4</div><div class="role">DV 主</div></div><div class="body">
+    <div class="say"><div class="who">題目・全組文字相同</div>整體而言，請問您支不支持普發現金一萬元這項政策？</div>
+    <div class="opts"><span>很支持</span><span>支持</span><span>不支持</span><span>很不支持</span><span>沒意見／不知道</span></div>
+  </div></div>
+
+  <div class="step"><div class="no"><div class="id">26-4b</div><div class="role">DV・前瞻</div></div><div class="body">
+    <div class="say"><div class="who">題目・全組文字相同</div>未來如果政府財政狀況允許，請問您支不支持再次普發現金？</div>
+    <div class="opts"><span>很支持</span><span>支持</span><span>不支持</span><span>很不支持</span><span>沒意見／不知道</span></div>
+    <div class="note">受訪時多數人已領到 2026 年的一萬元，26-4 可能接近天花板。本題把評價移到未來，作替代主依變項。</div>
+  </div></div>
+
+  <div class="step"><div class="no"><div class="id">25′</div><div class="role">DV・重測</div></div><div class="body">
+    <div class="say"><div class="who">題目・與原題 25 同文</div>承上題，請問您贊不贊成政府編列預算增加國防經費？</div>
+    <div class="opts"><span>非常贊成</span><span>贊成</span><span>不太贊成</span><span>非常不贊成</span><span>無意見</span></div>
+    <div class="note">分析用 25′ 減題 25 的個人內差。答完接回題 27；原題 27–41 為外溢依變項。</div>
+  </div></div>
+
+  <h3>方案 B 分析對應</h3>
+  <p class="kicker">第一步操弄效度：26-1b 四組 ANOVA，確認 F1 焦慮、F2 生氣、G1 樂觀各自最高。第二步總效果：26-4、26-4b、(25′−25) 對比 F1／F2／G1 vs F0（每組約 750，可偵測 d≈0.15）。第三步中介：PROCESS bootstrap，F1 → 焦慮、F2 → 生氣、G1 → 樂觀 → 26-4 與 25′，比較三條間接效果的符號。調節式中介：× 政黨認同、× 威脅接受度，看生氣路徑在非綠營是否轉成反噬。</p>
+</section>
+
+<!-- ============ C ============ -->
+<section class="pane C" data-pane="C" hidden>
+  <div class="meta">
+    <div><b>設計</b>Conjoint，within-subjects，全員作答，無分組</div>
+    <div><b>輪數</b>每人 3 輪甲乙配對（9,000 配對、18,000 profile）</div>
+    <div><b>新增題數</b>6 ／ 上限 10（3 輪＋ 26-5、26-6、25′；不含情緒題）</div>
+    <div><b>估計</b>AMCE，SE 依受訪者 cluster</div>
+  </div>
+  <div class="path C">
+    <div class="eyebrow">解釋路徑</div>
+    <div class="prow"><span class="pk">操弄</span><span class="pv">方案屬性隨機組合：政府強調的訴求（威脅／紅利）× 分配方式（普發／排富）［× 金額，可選］</span></div><div class="prow"><span class="pk">機制</span><span class="pv">不測機制。每輪二擇一，估計各屬性水準對被選中機率的平均邊際效果</span></div><div class="prow"><span class="pk">結果</span><span class="pv">AMCE：β1 訴求、β2 分配；26-6 整體支持為跨案共用基準</span></div><div class="prow"><span class="pk">調節</span><span class="pv">條件式 AMCE：× 所得、× 政黨認同、× 威脅接受度</span></div>
+    <div class="pcan"><b>能說</b>分配方式與政府訴求何者更左右方案偏好；排富的代價以訴求效果的倍數表達；哪些子群對威脅訴求反應相反。</div>
+    <div class="pcan"><b>不能說</b>框架相對無框架是否有效或反噬（無無框架基準，威脅只與紅利互比）；情緒機制；國防排擠只看全體平均位移。</div>
+  </div>
+
+  <figure class="archfig"><figcaption class="eyebrow">實驗架構圖</figcaption><svg class="flow arch C" viewBox="0 0 1000 400" role="img" aria-label="方案 C 架構・Conjoint：屬性隨機組合 → 選擇 → AMCE，無基準組、無中介">
+<defs><marker id="am-C" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="fmk"/></marker></defs>
+<text class="fcap" x="0" y="16" text-anchor="start">方案 C 架構・Conjoint：屬性隨機組合 → 選擇 → AMCE，無基準組、無中介</text>
+<rect class="fb arm" x="0" y="60" width="230" height="56" rx="7"/>
+<text class="ft" x="115.0" y="84.5" text-anchor="middle">屬性① 政府強調的訴求</text>
+<text class="fs" x="115.0" y="100.5" text-anchor="middle">中國施壓 ／ 共享紅利</text>
+<rect class="fb arm" x="0" y="140" width="230" height="56" rx="7"/>
+<text class="ft" x="115.0" y="164.5" text-anchor="middle">屬性② 分配方式</text>
+<text class="fs" x="115.0" y="180.5" text-anchor="middle">全民普發 ／ 排富</text>
+<rect class="fb rnd" x="0" y="220" width="230" height="56" rx="7"/>
+<text class="ft" x="115.0" y="244.5" text-anchor="middle">屬性③ 金額（可選）</text>
+<text class="fs" x="115.0" y="260.5" text-anchor="middle">五千 ／ 一萬 ／ 一萬五</text>
+<rect class="fb arm" x="330" y="110" width="220" height="90" rx="7"/>
+<text class="ft" x="440.0" y="143.5" text-anchor="middle">隨機配對 方案甲 vs 乙</text>
+<text class="fs" x="440.0" y="159.5" text-anchor="middle">每輪至少一屬性不同</text>
+<text class="fs" x="440.0" y="175.5" text-anchor="middle">每人 3 輪・9,000 配對</text>
+<rect class="fb dv" x="640" y="120" width="140" height="70" rx="7"/>
+<text class="ft" x="710.0" y="143.5" text-anchor="middle">每輪選擇</text>
+<text class="fs" x="710.0" y="159.5" text-anchor="middle">甲／乙／無法決定</text>
+<text class="fs" x="710.0" y="175.5" text-anchor="middle">26-2・3・4</text>
+<rect class="fb dv" x="830" y="60" width="170" height="64" rx="7"/>
+<text class="ft" x="915.0" y="80.5" text-anchor="middle">AMCE</text>
+<text class="fs" x="915.0" y="96.5" text-anchor="middle">β₁ 訴求・β₂ 分配</text>
+<text class="fs" x="915.0" y="112.5" text-anchor="middle">SE cluster 受訪者</text>
+<rect class="fb dv" x="830" y="160" width="170" height="56" rx="7"/>
+<text class="ft" x="915.0" y="184.5" text-anchor="middle">相對重要性</text>
+<text class="fs" x="915.0" y="200.5" text-anchor="middle">|β₂| ／ |β₁|</text>
+<rect class="fb pre" x="830" y="250" width="170" height="50" rx="7"/>
+<text class="ft" x="915.0" y="271.5" text-anchor="middle">26-6 整體支持</text>
+<text class="fs" x="915.0" y="287.5" text-anchor="middle">跨案共用基準</text>
+<path class="fe arm" d="M230,88 C280.0,88 280.0,155 330,155" marker-end="url(#am-C)"/>
+<path class="fe arm" d="M230,168 C280.0,168 280.0,155 330,155" marker-end="url(#am-C)"/>
+<path class="fe arm" d="M230,248 C280.0,248 280.0,155 330,155" marker-end="url(#am-C)"/>
+<path class="fe arm" d="M550,155 L640,155" marker-end="url(#am-C)"/>
+<path class="fe " d="M780,140 C805.0,140 805.0,92 830,92" marker-end="url(#am-C)"/>
+<path class="fe " d="M780,170 C805.0,170 805.0,188 830,188" marker-end="url(#am-C)"/>
+<rect class="fb mod" x="300" y="300" width="300" height="50" rx="7"/>
+<text class="ft" x="450.0" y="321.5" text-anchor="middle">所得・政黨認同・威脅接受度 MOD</text>
+<text class="fs" x="450.0" y="337.5" text-anchor="middle">題 47・35/36・18、24、26–31</text>
+<path class="fe mod" d="M450,300 Q655.0,172.0 860,124" marker-end="url(#am-C)"/>
+<text class="fl" x="700" y="262" text-anchor="middle">條件式 AMCE（子群）</text>
+<text class="fl" x="330" y="94" text-anchor="start">潘老師版：改為每人評 5 份單一方案、屬性 shown/hidden</text>
+<path class="fe arm" d="M0,388 L34,388"/>
+<text class="fl" x="40" y="392" text-anchor="start">隨機化</text>
+<path class="fe " d="M99,388 L133,388"/>
+<text class="fl" x="139" y="392" text-anchor="start">估計</text>
+<path class="fe mod" d="M187,388 L221,388"/>
+<text class="fl" x="227" y="392" text-anchor="start">條件式分析</text>
+</svg></figure>
+
+  <figure class="flowfig"><svg class="flow C" viewBox="0 0 1000 380" role="img" aria-label="方案 C 流程・Conjoint，within-subjects 三輪">
+<defs><marker id="fm-C" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="fmk"/></marker></defs>
+<text class="fcap" x="0" y="16" text-anchor="start">方案 C 流程・Conjoint，within-subjects 三輪</text>
+<rect class="fb pre" x="0" y="150" width="150" height="70" rx="6"/>
+<text class="ft" x="75.0" y="173.5" text-anchor="middle">前測 題 1–26</text>
+<text class="fs" x="75.0" y="189.5" text-anchor="middle">威脅感知・認同</text>
+<text class="fs" x="75.0" y="205.5" text-anchor="middle">政黨・所得・題25</text>
+<path class="fe " d="M150,185 L190,185" marker-end="url(#fm-C)"/>
+<rect class="fb " x="190" y="150" width="130" height="70" rx="6"/>
+<text class="ft" x="255.0" y="173.5" text-anchor="middle">頁首指示語</text>
+<text class="fs" x="255.0" y="189.5" text-anchor="middle">「比較兩種方案，</text>
+<text class="fs" x="255.0" y="205.5" text-anchor="middle">共 3 次」</text>
+<path class="fe " d="M320,185 L360,185" marker-end="url(#fm-C)"/>
+<rect class="fb rnd" x="360" y="150" width="130" height="70" rx="6"/>
+<text class="ft" x="425.0" y="173.5" text-anchor="middle">固定背景句</text>
+<text class="fs" x="425.0" y="189.5" text-anchor="middle">總預算編列一萬元</text>
+<text class="fs" x="425.0" y="205.5" text-anchor="middle">每輪表格上方</text>
+<path class="fe arm" d="M490,185 C515.0,185 515.0,69.0 540,69.0" marker-end="url(#fm-C)"/>
+<rect class="fb arm" x="540" y="40" width="220" height="58" rx="6"/>
+<text class="ft" x="650.0" y="57.5" text-anchor="middle">第 1 輪　26-2</text>
+<text class="fs" x="650.0" y="73.5" text-anchor="middle">方案甲 vs 方案乙</text>
+<text class="fs" x="650.0" y="89.5" text-anchor="middle">訴求・分配 各自隨機</text>
+<path class="fe " d="M650.0,98 L650.0,156" marker-end="url(#fm-C)"/>
+<path class="fe arm" d="M490,185 L540,185.0" marker-end="url(#fm-C)"/>
+<rect class="fb arm" x="540" y="156" width="220" height="58" rx="6"/>
+<text class="ft" x="650.0" y="173.5" text-anchor="middle">第 2 輪　26-3</text>
+<text class="fs" x="650.0" y="189.5" text-anchor="middle">方案甲 vs 方案乙</text>
+<text class="fs" x="650.0" y="205.5" text-anchor="middle">訴求・分配 各自隨機</text>
+<path class="fe " d="M650.0,214 L650.0,272" marker-end="url(#fm-C)"/>
+<path class="fe arm" d="M490,185 C515.0,185 515.0,301.0 540,301.0" marker-end="url(#fm-C)"/>
+<rect class="fb arm" x="540" y="272" width="220" height="58" rx="6"/>
+<text class="ft" x="650.0" y="289.5" text-anchor="middle">第 3 輪　26-4</text>
+<text class="fs" x="650.0" y="305.5" text-anchor="middle">方案甲 vs 方案乙</text>
+<text class="fs" x="650.0" y="321.5" text-anchor="middle">訴求・分配 各自隨機</text>
+<text class="fl" x="650.0" y="30" text-anchor="middle">全員作答・無分組</text>
+<path class="fe arm" d="M760,301.0 C780.0,301.0 780.0,60 800,60" marker-end="url(#fm-C)"/>
+<rect class="fb chk" x="800" y="40" width="180" height="36" rx="6"/>
+<text class="ft" x="890.0" y="54.5" text-anchor="middle">26-5 理解檢核</text>
+<text class="fs" x="890.0" y="70.5" text-anchor="middle">排富出現幾次</text>
+<path class="fe " d="M890.0,76 L890.0,86" marker-end="url(#fm-C)"/>
+<rect class="fb dv" x="800" y="86" width="180" height="36" rx="6"/>
+<text class="ft" x="890.0" y="100.5" text-anchor="middle">26-6 整體支持</text>
+<text class="fs" x="890.0" y="116.5" text-anchor="middle">與 A／B 26-4 同文</text>
+<text class="fstar" x="972" y="99" text-anchor="end">★</text>
+<path class="fe " d="M890.0,122 L890.0,132" marker-end="url(#fm-C)"/>
+<rect class="fb dv" x="800" y="132" width="180" height="36" rx="6"/>
+<text class="ft" x="890.0" y="154.5" text-anchor="middle">25′ 國防經費重測</text>
+<path class="fe " d="M890,168 L890,190" marker-end="url(#fm-C)"/>
+<rect class="fb pre" x="810" y="190" width="160" height="30" rx="6"/>
+<text class="ft" x="890.0" y="209.5" text-anchor="middle">接回原問卷 題 27–49</text>
+<text class="fl" x="890" y="30" text-anchor="middle">第 3 輪後</text>
+<text class="fmono" x="650" y="352" text-anchor="middle">3,000 × 3 輪＝9,000 配對・AMCE，SE 依受訪者 cluster</text>
+</svg></figure>
+
+  <div class="step"><div class="no"><div class="id">頁首</div><div class="role">指示語</div></div><div class="body">
+    <div class="say"><div class="who">受訪者看到</div>接下來我們想請您比較兩種政府可能採取的現金發放方案，並選出您比較支持的一種。這樣的比較會出現 3 次，每次的方案內容都不一樣，請仔細閱讀後再作答。</div>
+  </div></div>
+
+  <div class="step"><div class="no"><div class="id">屬性</div><div class="role">平台端</div></div><div class="body">
+    <div class="title">兩個屬性各兩水準，每輪獨立隨機帶入；甲乙至少一個屬性不同；同一人三輪不重複同一配對</div>
+    <div class="scroll"><table><tr><th>屬性</th><th>水準 1</th><th>水準 2</th></tr>
+    <tr><td>政府強調的訴求</td><td>因應中國大陸對台灣的軍事與經濟施壓</td><td>因應近年 AI 帶動的台灣經濟成長</td></tr>
+    <tr><td>分配方式</td><td>不分所得高低，全民普發</td><td>排除所得較高者，排富發放</td></tr>
+    <tr><td>金額</td><td colspan="2">固定「現金一萬元」；可選擴充為 五千／一萬／一萬五 三水準（待潘老師決定）</td></tr></table></div>
+    <div class="note">資料以 profile 層級記錄：<span class="var">r{1-3}_{a,b}_appeal</span>、<span class="var">r{1-3}_{a,b}_dist</span>、<span class="var">r{1-3}_choice</span>。</div>
+  </div></div>
+
+  <div class="step"><div class="no"><div class="id">26-2<br>26-3<br>26-4</div><div class="role">DV・第 1／2／3 輪</div></div><div class="body">
+    <div class="title">三輪畫面完全相同，只有表格內容重新隨機</div>
+    <div class="say"><div class="who">固定背景句・每輪表格上方</div>行政院在今年中央政府總預算中編列經費，規劃發放現金一萬元，並研擬以下兩種可能方案：</div>
+    <div class="scroll"><table><tr><th></th><th>方案甲</th><th>方案乙</th></tr>
+    <tr><td>政府強調的訴求</td><td>〔隨機：水準 1 或 2〕</td><td>〔隨機，與甲至少一項不同〕</td></tr>
+    <tr><td>分配方式</td><td>〔隨機：水準 1 或 2〕</td><td>〔隨機〕</td></tr>
+    <tr><td>金額</td><td>現金一萬元</td><td>現金一萬元</td></tr></table></div>
+    <div class="say"><div class="who">題目</div>請問，您比較支持方案甲，還是方案乙？</div>
+    <div class="opts"><span>方案甲</span><span>方案乙</span><span>兩者差不多，無法決定</span></div>
+    <div class="note">甲乙欄寬相等、字級一致；「無法決定」用小字放下方，避免被當預設。</div>
+  </div></div>
+
+  <div class="step"><div class="no"><div class="id">26-5</div><div class="role">CHECK・理解檢核</div></div><div class="body">
+    <div class="say"><div class="who">題目・第 3 輪結束後顯示一次</div>請問，剛剛 3 次比較中，出現「排富（排除所得較高者）」的方案，總共出現過幾次？</div>
+    <div class="opts"><span>0 次</span><span>1 次</span><span>2 次</span><span>3 次</span><span>不確定</span></div>
+    <div class="note">不可返回；系統依實際呈現次數核對，答對即通過。</div>
+  </div></div>
+
+  <div class="step"><div class="no"><div class="id">26-6</div><div class="role">DV・共用基準</div></div><div class="body">
+    <div class="say"><div class="who">題目・全員同文</div>整體而言，請問您支不支持普發現金一萬元這項政策？</div>
+    <div class="opts"><span>很支持</span><span>支持</span><span>不支持</span><span>很不支持</span><span>沒意見／不知道</span></div>
+    <div class="note">與 A／B 案的 26-4 同文，作跨方案比較基準。</div>
+  </div></div>
+
+  <div class="step"><div class="no"><div class="id">25′</div><div class="role">DV・重測</div></div><div class="body">
+    <div class="say"><div class="who">題目・與原題 25 同文</div>承上題，請問您贊不贊成政府編列預算增加國防經費？</div>
+    <div class="opts"><span>非常贊成</span><span>贊成</span><span>不太贊成</span><span>非常不贊成</span><span>無意見</span></div>
+    <div class="note">分析用 25′ 減題 25 的個人內差。C 案無無框架組，25′ 只能看全體平均位移與威脅暴露次數的相關，屬弱檢驗。答完接回題 27。</div>
+  </div></div>
+
+  <h3>方案 C 分析對應</h3>
+  <p class="kicker">Pr(方案被選中)＝β0＋β1(訴求＝威脅)＋β2(分配＝排富)［＋β3 金額］，profile 層級 OLS／logit，SE 依受訪者 cluster；β 即 AMCE（Hainmueller, Hopkins &amp; Yamamoto 2014）。相對重要性＝|β2|／|β1|。條件式 AMCE：× 題 47 所得、× 政黨認同、× 威脅接受度。穩健性：排除 26-5 未通過者。</p>
+</section>
+
+<h2>原問卷可作替代測量的題組</h2>
+<p class="lede">若 26-4 效果不明顯（最可能原因是普發支持率本來就高），下列原問卷題可不加題頂上。模組之後的題可直接當第二依變項；模組之前的題只能當基線或調節。</p>
+
+<h3>一、模組之後的題：可直接比較組間差異（外溢依變項）</h3>
+<div class="scroll"><table>
+<tr><th>原題</th><th>題目</th><th>替代什麼</th><th>預期（威脅框架 vs E0／T0）</th></tr>
+<tr><td>27</td><td>捍衛民主自由，即使付出戰爭代價也在所不辭</td><td>威脅框架的「決心」外溢；補償論之外的 rally 指標</td><td>威脅組 ↑；若 26-4 無差但 27 有差，表示框架有感但不轉成現金支持</td></tr>
+<tr><td>28</td><td>守護和平，即使放棄民主也沒關係</td><td>27 的反向題，兩題合成「抗戰決心」</td><td>威脅組 ↓</td></tr>
+<tr><td>29</td><td>萬一中國攻台，願不願意為保衛國家而戰</td><td>行為意向版的 27，與 Wu &amp; Lin 2026 威脅框架文獻直接對話</td><td>威脅組 ↑（反噬時：非綠營 ↓）</td></tr>
+<tr><td>30／31</td><td>中國政府是台灣的朋友／敵人（已隨機輪替）</td><td>威脅框架是否抬高敵意認知；操弄「是否被聽進去」的間接檢核</td><td>威脅組 31 ↑、30 ↓；若全無差異，操弄本身太弱</td></tr>
+<tr><td>32–34</td><td>對中共／習近平／中國人民好感</td><td>敵意的對象分化：框架應打到 32/33，不該打到 34</td><td>32/33 ↓、34 不變＝框架精準；34 也 ↓＝泛化敵意</td></tr>
+<tr><td>37</td><td>兩岸談判較信任哪個政黨（原題即在模組後，不重測）</td><td>政黨信任外溢，反噬的最直接證據</td><td>威脅組中非綠營受訪者更不信任民進黨</td></tr>
+<tr><td>38</td><td>年底縣市長選舉支持哪黨候選人</td><td>投票意向外溢；只做組間比較，不另加題</td><td>通常無差，有差即是重要發現，須保守解讀</td></tr>
+<tr><td>40</td><td>貧富差距嚴不嚴重</td><td>排富操弄（E2/E4）的替代依變項：分配正義感知</td><td>排富組 40 ↑；所得高者反向</td></tr>
+<tr><td>41</td><td>自己的生活水準與努力相比公不公平</td><td>排富的自利路徑：高所得被排除者的相對剝奪</td><td>E2/E4 × 題 47 高所得 → 41 ↓（不公平）</td></tr>
+<tr><td>39</td><td>最近日子快不快樂</td><td>A、C 案沒有情緒題時的粗略替代</td><td>威脅組 ↓、紅利組 ↑，效果小，只作輔助</td></tr>
+</table></div>
+<div class="note">這些題離刺激 1–15 題，效果會衰減。建議預先指定 27、29、31、40 為第二依變項並做多重檢定校正，其餘列探索。</div>
+
+<h3>二、模組之前的題：當基線做重測，或當調節變項</h3>
+<div class="scroll"><table>
+<tr><th>原題</th><th>題目</th><th>用法</th></tr>
+<tr><td>25</td><td>贊不贊成增加國防經費</td><td>已採用：25′ − 25 個人內差分，測排擠／rally。是目前唯一的前後測。</td></tr>
+<tr><td>7</td><td>兩岸交流中經濟利益 vs 國家安全哪個重要</td><td>guns-vs-butter 的直接取捨題。若要第二個前後測，7′ 比 24′ 更貼近「現金 vs 國防」的資源取捨；也可只當調節：答「國家安全」者在威脅框架下的反應。</td></tr>
+<tr><td>24</td><td>增強國防準備 vs 展現善意談判</td><td>調節：威脅框架接受度指數的成分題；不建議重測，與 25 重疊。</td></tr>
+<tr><td>18／19／20</td><td>威脅是否升高／會不會武力逼談／幾年內開戰</td><td>調節：既有威脅感知越高，威脅框架越像「老調」，效果應越小（疲勞）或越大（共鳴），方向本身是發現。20 可當連續變項。</td></tr>
+<tr><td>21／22</td><td>對國軍能力信心／美國會不會出兵</td><td>調節：效能感。威脅框架對「覺得守得住」的人是補償，對「覺得守不住」的人是焦慮，情緒路徑（26-1b）應在此分岔。</td></tr>
+<tr><td>11／12</td><td>台灣人／中國人認同、統獨六分類</td><td>調節：與政黨認同共線，作穩健性替代。</td></tr>
+<tr><td>35／36</td><td>政黨認同</td><td>調節：反噬假設的核心，與威脅接受度指數交叉。</td></tr>
+<tr><td>47／44</td><td>個人所得／就業狀態（家管、退休、失業）</td><td>調節：排富操弄的自利變項。44 補 47 的缺漏：沒有收入者是普發的最大受益群。</td></tr>
+<tr><td>2</td><td>對台灣未來發展有沒有信心</td><td>調節或基線：樂觀者對威脅框架較不焦慮。</td></tr>
+<tr><td>8</td><td>過去一週用過抖音／小紅書／微信</td><td>調節：中國平台使用者對「中國威脅」框架的接受度可能最低，是反噬之外的另一個失效群。</td></tr>
+</table></div>
+
+<h3>三、效果不好時的判讀順序</h3>
+<div class="scroll"><table>
+<tr><th>情況</th><th>先看</th><th>再看</th><th>結論</th></tr>
+<tr><td>26-4 無組間差異</td><td>26-3 通過率（B 案另看 26-1b 焦慮／生氣組間差）</td><td>30/31、27/29</td><td>檢核通過但情緒與外溢都無差＝框架失效；情緒有差但 26-4 無差＝有感不買單（疲勞）</td></tr>
+<tr><td>26-4 天花板（支持率＞85%）</td><td>26-2 理由贊成、26-4b 再次普發意願</td><td>25′ − 25、40</td><td>把主依變項改報 26-2，26-4 降為描述</td></tr>
+<tr><td>威脅主效果為零但交互顯著</td><td>× 35/36、× 威脅接受度指數</td><td>× 21/22、× 8</td><td>反噬成立：報條件效果，不報平均效果</td></tr>
+<tr><td>排富無效果</td><td>× 47、× 44</td><td>40、41</td><td>自利路徑：效果只在高所得或無收入兩端</td></tr>
+</table></div>
+
+<div class="warn">三案共同待定：紅利句是否點名「AI」（可改「近年經濟成長」）；B 案三個情緒子句需前測確認各自只引發目標情緒；A 案是否補 37′；C 案是否加金額屬性。2026 年 8 月普發的新聞描述尚未查證，刺激句定稿前請核對行政院公告用語。</div>
+
+</div>
+<script>
+(function(){
+  var tabs=document.querySelectorAll('.tab'),panes=document.querySelectorAll('.pane');
+  function show(d){tabs.forEach(function(t){t.setAttribute('aria-selected',t.dataset.d===d?'true':'false')});
+    panes.forEach(function(p){p.hidden=p.dataset.pane!==d});
+    try{localStorage.setItem('cash_items_tab',d)}catch(e){}}
+  tabs.forEach(function(t){t.addEventListener('click',function(){show(t.dataset.d)})});
+  var init='A';try{init=localStorage.getItem('cash_items_tab')||'A'}catch(e){}
+  show(init);
+})();
+</script>
