@@ -12,6 +12,9 @@ body{background:var(--paper);color:var(--ink);font-family:var(--sans);line-heigh
 .wrap{max-width:1360px;margin:0 auto;padding:28px 24px 60px}
 .eyebrow{font-family:var(--mono);font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
 h1{font-family:var(--serif);font-weight:400;font-size:clamp(1.4rem,2.2vw + .6rem,1.9rem);letter-spacing:-.02em;margin:.3rem 0 .8rem;text-wrap:balance}
+.aims{max-width:76ch;margin:0 0 18px;padding:14px 18px;background:#fff;border:1px solid var(--rule);border-radius:6px}
+.aims h2{font-family:var(--serif);font-weight:400;font-size:1.15rem;margin:0 0 8px}
+.aims p{font-size:.9rem;margin:0 0 8px} .aims p:last-child{margin:0}
 .tabs{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 10px}
 .tabs button{font-size:.9rem;padding:7px 16px}
 .meta{font-size:.82rem;color:var(--muted);margin:0 0 12px}
@@ -63,6 +66,13 @@ body{margin:0}</style>
 <div class="wrap">
 <p class="eyebrow">普發現金 × 中國威脅框架 · 實驗題組三方案 · 審查版</p>
 <h1>三種實驗題組：框架實驗、情緒實驗、Conjoint</h1>
+<section class="aims">
+<h2>研究目的與貢獻</h2>
+<p><b>目的</b>　2025 年兩波大罷免把「中國威脅」動員到極限，結果全數未通過。本研究要問的是：威脅框架在這之後還剩多少說服力，對誰有效，對誰反噬。普發現金一萬元是現成的檢驗場。同一筆錢十八個月內發兩次，政策所有權從藍翻綠，威脅語言同時被拿來支持與反對發錢。把它放進中國效應問卷，問的不是民眾要不要錢，而是中國威脅滲進國內分配政治多深。</p>
+<p><b>理論貢獻</b>　補償論與排擠論第一次在同一個分配議題上對決。既有研究用觀察資料看外部風險與福利支出的相關，或用實驗看威脅對國防態度的效果，很少把「威脅能不能當發錢的理由」直接隨機化，更沒有同時測現金與國防兩個依變項。方案 B 再往下一層，把損失框架拆成恐懼與憤怒兩條情緒路徑，預測兩者把現金推往相反方向。這個分岔沒有人檢驗過。</p>
+<p><b>脈絡貢獻</b>　罷免本身無法隨機化，這是能隨機化的最近替代。關鍵格子是「非綠營但威脅感知高」的受訪者：他們同意威脅存在，卻未必接受執政黨用威脅正當化發錢。威脅框架在這群人身上失效或反噬，就是罷免失敗在個體層次的機制。</p>
+<p><b>資料優勢</b>　實驗掛在中國效應 2026（N≈3,000），前測已有威脅感知、認同、政黨、所得，後測有 27 到 41 題當外溢依變項，獨立線上實驗做不到。刺激採單一詞位最小配對，各組只差一個名詞片語，回應審查人對刺激稀釋的質疑。結果不論哪邊勝出都有理論意義；若框架主效果為零而情緒路徑顯著，就是威脅疲勞的直接證據。</p>
+</section>
 <div class="tabs" role="tablist"><button data-tab="A" aria-pressed="true">方案 A・框架實驗</button><button data-tab="B" aria-pressed="false">方案 B・情緒實驗</button><button data-tab="C" aria-pressed="false">方案 C・Conjoint</button></div>
 <section class="pane" data-pane="A">
 <p class="meta">2（理由）× 2（分配）＋ E0，between-subjects，每組 ≈600，新增 6 題（含 25′）</p>
